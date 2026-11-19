@@ -32,8 +32,7 @@ body{color:var(--text);font-family:'Space Grotesk',system-ui,sans-serif;font-siz
   radial-gradient(130% 85% at 50% 110%, #1a0a08 0%, transparent 52%),
   radial-gradient(90% 60% at 80% 45%, rgba(140,30,30,.10), transparent 60%),
   linear-gradient(180deg,#09070a 0%, #0c0809 50%, #09070a 100%)}
-canvas#ambience{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5}
-body::before{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.55;mix-blend-mode:overlay;
+body::before{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.08;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
 img,video{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
@@ -56,13 +55,13 @@ h2.big{font-size:clamp(32px,5.4vw,76px);line-height:1.03;font-weight:700;letter-
 @media(max-width:900px){#sidenav{display:none}}
 
 /* spotlight cursor + mag */
-#glow{position:fixed;top:0;left:0;width:480px;height:480px;margin:-240px 0 0 -240px;border-radius:50%;z-index:90;pointer-events:none;background:radial-gradient(circle,rgba(var(--accent-rgb),.12),transparent 62%);mix-blend-mode:screen;opacity:0;transition:opacity .5s;will-change:transform}
+#glow{position:fixed;top:0;left:0;width:480px;height:480px;margin:-240px 0 0 -240px;border-radius:50%;z-index:90;pointer-events:none;background:radial-gradient(circle,rgba(var(--accent-rgb),.12),transparent 62%);opacity:0;transition:opacity .5s;will-change:transform}
 @media(hover:none){#glow{display:none}}
 .mag{will-change:transform;transition:transform .3s var(--ease)}
 
 /* nav */
 header.nav{position:fixed;inset:0 0 auto;display:flex;justify-content:space-between;align-items:center;padding:20px clamp(18px,4vw,48px);z-index:150;transition:background .4s,padding .4s,border-color .4s;border-bottom:1px solid transparent}
-header.nav.solid{background:rgba(var(--bg-rgb),.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:12px clamp(18px,4vw,48px);border-bottom:1px solid var(--border)}
+header.nav.solid{background:rgba(var(--bg-rgb),.94);padding:12px clamp(18px,4vw,48px);border-bottom:1px solid var(--border)}
 .brand{display:flex;align-items:center}
 .brand img{height:clamp(20px,2.3vw,30px);width:auto;filter:drop-shadow(0 0 18px rgba(var(--accent-rgb),.25))}
 .nav-links{display:flex;gap:30px;align-items:center}
@@ -131,7 +130,7 @@ section{position:relative;padding:clamp(72px,10vw,138px) 0;z-index:2}
 .showcase{position:relative;overflow:hidden;padding:clamp(20px,3vw,44px) 0 clamp(30px,4vw,60px);z-index:2}
 .orbit{--w:clamp(150px,15vw,230px);--r:clamp(300px,32vw,480px);position:relative;z-index:2;height:clamp(270px,27vw,400px);perspective:1650px;perspective-origin:50% 50%;
   -webkit-mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
-.orbit .track{position:absolute;left:50%;top:50%;width:1px;height:1px;transform-style:preserve-3d;cursor:var(--drag);transform:translateZ(var(--r)) rotateY(var(--spin,0deg))}
+.orbit .track{position:absolute;left:50%;top:50%;width:1px;height:1px;transform-style:preserve-3d;cursor:var(--drag);transform:translateZ(var(--r));will-change:transform}
 .orbit .slide{position:absolute;left:0;top:0;width:var(--w);height:calc(var(--w)*1.5);margin-left:calc(var(--w)*-.5);margin-top:calc(var(--w)*-.75);
   border-radius:14px;overflow:hidden;border:1px solid var(--border);background:#0d0d0d;
   transform:rotateY(calc(var(--i)*30deg)) translateZ(var(--r)) rotateY(180deg);backface-visibility:hidden}
@@ -156,7 +155,7 @@ section{position:relative;padding:clamp(72px,10vw,138px) 0;z-index:2}
 .title-card h3{font-size:clamp(21px,2.1vw,28px);font-weight:700;letter-spacing:-.01em;color:#fff;line-height:1.1}
 .title-card p{font-size:14.5px;line-height:1.5;color:rgba(255,255,255,.84);max-height:0;overflow:hidden;opacity:0;transition:max-height .6s var(--ease),opacity .4s,margin .4s}
 .title-card:hover{border-color:var(--border-hover);transform:translateY(-3px)}
-.title-card:hover img{transform:scale(1.05);filter:blur(2px) brightness(.55)}
+.title-card:hover img{transform:scale(1.05);filter:brightness(.45)}
 .title-card:hover .grad{background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,rgba(0,0,0,.92) 100%)}
 .title-card:hover p{max-height:340px;opacity:1;margin-top:10px}
 @media(hover:none){.title-card p{max-height:none;opacity:1;margin-top:10px}.title-card .grad{background:linear-gradient(180deg,rgba(0,0,0,0) 20%,rgba(0,0,0,.92) 100%)}}
@@ -226,13 +225,12 @@ footer{border-top:1px solid var(--border);padding:48px 0 40px;position:relative;
 .foot .tag{color:var(--text-2)}
 .foot .tag b{color:var(--text);font-weight:500}
 
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.appear{opacity:1;transform:none}.hero h1 .ln b{transform:none}canvas#ambience{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.appear{opacity:1;transform:none}.hero h1 .ln b{transform:none}}
 </style>
 </head>
 <body>
 <div id="bg"></div>
 <div id="topbar"></div>
-<canvas id="ambience"></canvas>
 <div id="glow"></div>
 <nav id="sidenav" aria-hidden="true">
   <a href="#about"><span class="tx">About</span><span class="ln"></span></a>
@@ -252,7 +250,7 @@ footer{border-top:1px solid var(--border);padding:48px 0 40px;position:relative;
 </header>
 
 <section class="hero" id="top">
-  <video autoplay muted loop playsinline preload="auto" poster="assets/img/hero-poster.jpg"><source src="assets/video/hero.mp4" type="video/mp4"></video>
+  <video autoplay muted loop playsinline preload="auto" poster="assets/img/hero-poster.jpg"><source src="assets/video/hero-720.mp4" type="video/mp4" media="(max-width: 900px)"><source src="assets/video/hero.mp4" type="video/mp4"></video>
   <div class="shade"></div>
   <div class="hero-body">
     <h1><span class="ln"><b>KALYNA</b></span><span class="ln"><b>FILM<span class="fx">.</span></b></span></h1>
@@ -289,18 +287,18 @@ footer{border-top:1px solid var(--border);padding:48px 0 40px;position:relative;
 <div class="showcase" id="showcase">
   <div class="orbit appear">
     <div class="track" id="track">
-      <div class="slide" style="--i:0"><img src="assets/img/p_choice.jpg" alt="The Choice" loading="lazy" draggable="false"></div>
-      <div class="slide" style="--i:1"><img src="assets/img/cp_plyusha.jpg" alt="Plyusha: Service Dogs at War" loading="lazy" draggable="false"></div>
-      <div class="slide" style="--i:2"><img src="assets/img/p_lifetrain.jpg" alt="Life Train" loading="lazy" draggable="false"></div>
-      <div class="slide" style="--i:3"><img src="assets/img/cp_killme.jpg" alt="Kill Me Gently" loading="lazy" draggable="false"></div>
-      <div class="slide" style="--i:4"><img src="assets/img/p_steph.jpg" alt="Steph" loading="lazy" draggable="false"></div>
-      <div class="slide" style="--i:5"><img src="assets/img/cp_damned.jpg" alt="Dam(ned)²" loading="lazy" draggable="false"></div>
-      <div class="slide" style="--i:6"><img src="assets/img/p_promise.jpg" alt="A Promise to God" loading="lazy" draggable="false"></div>
-      <div class="slide" style="--i:7"><img src="assets/img/cp_light.jpg" alt="There Shall Be Light" loading="lazy" draggable="false"></div>
-      <div class="slide" style="--i:8"><img src="assets/img/p_loveme.jpg" alt="Love Me If You Can" loading="lazy" draggable="false"></div>
-      <div class="slide" style="--i:9"><img src="assets/img/cp_vulyk.jpg" alt="Vulyk Camp" loading="lazy" draggable="false"></div>
-      <div class="slide" style="--i:10"><img src="assets/img/p_nuclear.jpg" alt="Under the Nuclear Shadow" loading="lazy" draggable="false"></div>
-      <div class="slide" style="--i:11"><img src="assets/img/h_twosides.jpg" alt="Two Sides of Love" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:0"><img src="assets/img/ring/p_choice.jpg" width="400" height="600" alt="The Choice" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:1"><img src="assets/img/ring/cp_plyusha.jpg" width="400" height="600" alt="Plyusha: Service Dogs at War" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:2"><img src="assets/img/ring/p_lifetrain.jpg" width="400" height="600" alt="Life Train" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:3"><img src="assets/img/ring/cp_killme.jpg" width="400" height="600" alt="Kill Me Gently" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:4"><img src="assets/img/ring/p_steph.jpg" width="400" height="600" alt="Steph" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:5"><img src="assets/img/ring/cp_damned.jpg" width="400" height="600" alt="Dam(ned)²" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:6"><img src="assets/img/ring/p_promise.jpg" width="400" height="600" alt="A Promise to God" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:7"><img src="assets/img/ring/cp_light.jpg" width="400" height="600" alt="There Shall Be Light" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:8"><img src="assets/img/ring/p_loveme.jpg" width="400" height="600" alt="Love Me If You Can" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:9"><img src="assets/img/ring/cp_vulyk.jpg" width="400" height="600" alt="Vulyk Camp" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:10"><img src="assets/img/ring/p_nuclear.jpg" width="400" height="600" alt="Under the Nuclear Shadow" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:11"><img src="assets/img/ring/h_twosides.jpg" width="400" height="600" alt="Two Sides of Love" loading="lazy" draggable="false"></div>
     </div>
   </div>
 </div>
@@ -408,7 +406,7 @@ const nav=document.getElementById('nav'),prog=document.getElementById('topbar');
 function onScroll(){const st=scrollY,h=document.documentElement.scrollHeight-innerHeight;prog.style.width=(h>0?st/h*100:0)+'%';nav.classList.toggle('solid',st>40);}
 addEventListener('scroll',onScroll,{passive:true});onScroll();
 let lenis=null;
-if(!reduce&&window.Lenis){lenis=new Lenis({lerp:.09,smoothWheel:true});requestAnimationFrame(function r(t){lenis.raf(t);requestAnimationFrame(r)});lenis.on('scroll',onScroll);}
+if(!reduce&&window.Lenis){lenis=new Lenis({lerp:.14,smoothWheel:true,wheelMultiplier:1.05});requestAnimationFrame(function r(t){lenis.raf(t);requestAnimationFrame(r)});lenis.on('scroll',onScroll);}
 document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const id=a.getAttribute('href');if(id.length<2)return;const t=document.querySelector(id);if(!t)return;e.preventDefault();lenis?lenis.scrollTo(t,{offset:-10}):t.scrollIntoView({behavior:'smooth'})}));
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px',threshold:.1});
 document.querySelectorAll('.appear').forEach(el=>io.observe(el));
@@ -424,22 +422,13 @@ if(matchMedia('(hover:hover)').matches){
 (function(){const orbit=document.querySelector('.orbit'),track=document.getElementById('track');if(!orbit||!track)return;
   let angle=0,vel=0,drag=false,lastX=0,lastT=0;const SPEED=reduce?0:.09;
   let inView=true;try{new IntersectionObserver(es=>{inView=es[0].isIntersecting},{rootMargin:'140px'}).observe(orbit)}catch(e){}
-  (function f(){requestAnimationFrame(f);if(!inView)return;if(!drag){angle+=SPEED+vel;vel*=.95;if(Math.abs(vel)<.001)vel=0}track.style.setProperty('--spin',angle+'deg')})();
+  (function f(){requestAnimationFrame(f);if(!inView)return;if(!drag){angle+=SPEED+vel;vel*=.95;if(Math.abs(vel)<.001)vel=0}track.style.transform='translateZ(var(--r)) rotateY('+angle.toFixed(2)+'deg)'})();
   const gx=e=>e.touches?e.touches[0].clientX:e.clientX;
   track.addEventListener('pointerdown',e=>{drag=true;lastX=gx(e);vel=0;lastT=performance.now()});
   addEventListener('pointermove',e=>{if(!drag)return;const x=gx(e),n=performance.now(),dx=x-lastX,dt=Math.max(n-lastT,1),da=dx*.22;angle+=da;vel=da/dt*16;lastX=x;lastT=n},{passive:true});
   addEventListener('pointerup',()=>drag=false);addEventListener('pointercancel',()=>drag=false);
   track.addEventListener('dragstart',e=>e.preventDefault());
   orbit.addEventListener('wheel',e=>{if(Math.abs(e.deltaX)>Math.abs(e.deltaY)){e.preventDefault();const da=e.deltaX*.16;angle+=da;vel=da*.3}},{passive:false});
-})();
-(function(){const c=document.getElementById('ambience');if(!c||reduce){if(c)c.style.display='none';return}const ctx=c.getContext('2d');let W,H,run=true,t=0,last=0;
-  const blobs=[{x:.25,y:.3,r:.5,col:[226,72,59],s:.00018},{x:.75,y:.6,r:.6,col:[140,40,60],s:.00013},{x:.55,y:.85,r:.45,col:[90,40,30],s:.00021},{x:.85,y:.2,r:.4,col:[255,120,80],s:.00016}];
-  function size(){W=c.width=Math.max(2,innerWidth|0);H=c.height=Math.max(2,innerHeight|0)}size();addEventListener('resize',size);
-  document.addEventListener('visibilitychange',()=>{run=!document.hidden;last=0});
-  function draw(ts){requestAnimationFrame(draw);if(!run)return;if(ts-last<33)return;last=ts;t++;ctx.clearRect(0,0,W,H);ctx.globalCompositeOperation='screen';
-    blobs.forEach((b,i)=>{const x=(b.x+Math.sin(t*b.s*7+i)*.06)*W,y=(b.y+Math.cos(t*b.s*5+i)*.06)*H,rad=b.r*Math.min(W,H);const g=ctx.createRadialGradient(x,y,0,x,y,rad);g.addColorStop(0,'rgba('+b.col[0]+','+b.col[1]+','+b.col[2]+',.14)');g.addColorStop(1,'rgba('+b.col[0]+','+b.col[1]+','+b.col[2]+',0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H)});
-  }
-  requestAnimationFrame(draw);
 })();
 document.getElementById('yr').textContent=new Date().getFullYear();
 </script>
