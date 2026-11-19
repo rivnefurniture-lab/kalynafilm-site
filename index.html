@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kalyna Film — In-house full-cycle film production</title>
+<meta name="description" content="In-house full-cycle film production company. Kalyna Film champions originality and authenticity, never shying away from bold or unconventional ideas." />
+<meta name="theme-color" content="#09070a" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Kalyna Film — In-house full-cycle film production" />
+<meta property="og:description" content="Feature films, documentaries and series from Ukraine. Originality and authenticity, never shying away from bold ideas." />
+<meta property="og:image" content="assets/img/hero-poster.jpg" />
+<link rel="icon" type="image/png" sizes="64x64" href="assets/img/favicon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png" />
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#09070a;--bg-rgb:9,7,10;--surface:#100d10;--surface-hover:#1a1517;
+  --border:rgba(255,255,255,.08);--border-hover:rgba(255,255,255,.2);
+  --text:#F3F0EA;--text-2:#B7B2AC;--text-3:#7C776F;--text-rgb:243,240,234;
+  --accent:#E2483B;--accent-2:#F26B5E;--accent-rgb:226,72,59;
+  --onimg:#F4F1EB;
+  --max:1200px;--ease:cubic-bezier(.22,1,.36,1);--drag:grab;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{color:var(--text);font-family:'Space Grotesk',system-ui,sans-serif;font-size:18px;line-height:1.6;overflow-x:hidden;position:relative;background:var(--bg)}
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+  radial-gradient(130% 80% at 50% -10%, #1a0b0c 0%, transparent 52%),
+  radial-gradient(130% 85% at 50% 110%, #1a0a08 0%, transparent 52%),
+  radial-gradient(90% 60% at 80% 45%, rgba(140,30,30,.10), transparent 60%),
+  linear-gradient(180deg,#09070a 0%, #0c0809 50%, #09070a 100%)}
+canvas#ambience{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5}
+body::before{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.55;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--accent);color:#0a0604}
+.container{width:min(92vw,var(--max));margin-inline:auto}
+.serif{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400}
+.accent{color:var(--accent)}
+.kicker{font:500 12px/1.4 'JetBrains Mono';letter-spacing:.18em;text-transform:uppercase;color:var(--accent);display:inline-flex;gap:9px;align-items:center}
+.kicker::before{content:"";width:26px;height:1px;background:var(--accent)}
+h2.big{font-size:clamp(32px,5.4vw,76px);line-height:1.03;font-weight:700;letter-spacing:-.02em}
+
+/* topbar + section nav */
+#topbar{position:fixed;top:0;left:0;height:2px;width:0;background:var(--accent);z-index:200;box-shadow:0 0 12px var(--accent)}
+#sidenav{position:fixed;right:clamp(12px,2vw,26px);top:50%;transform:translateY(-50%);z-index:120;display:flex;flex-direction:column;gap:15px}
+#sidenav a{display:flex;align-items:center;gap:9px;justify-content:flex-end;color:var(--text-2);font:500 10px/1 'JetBrains Mono';letter-spacing:.14em;text-transform:uppercase}
+#sidenav .tx{opacity:0;transform:translateX(6px);transition:.3s;white-space:nowrap}
+#sidenav .ln{width:20px;height:2px;background:currentColor;opacity:.4;transition:.3s}
+#sidenav a:hover .tx,#sidenav a.on .tx{opacity:.95;transform:none}
+#sidenav a.on .ln{width:40px;opacity:1;background:var(--accent)}
+@media(max-width:900px){#sidenav{display:none}}
+
+/* spotlight cursor + mag */
+#glow{position:fixed;top:0;left:0;width:480px;height:480px;margin:-240px 0 0 -240px;border-radius:50%;z-index:90;pointer-events:none;background:radial-gradient(circle,rgba(var(--accent-rgb),.12),transparent 62%);mix-blend-mode:screen;opacity:0;transition:opacity .5s;will-change:transform}
+@media(hover:none){#glow{display:none}}
+.mag{will-change:transform;transition:transform .3s var(--ease)}
+
+/* nav */
+header.nav{position:fixed;inset:0 0 auto;display:flex;justify-content:space-between;align-items:center;padding:20px clamp(18px,4vw,48px);z-index:150;transition:background .4s,padding .4s,border-color .4s;border-bottom:1px solid transparent}
+header.nav.solid{background:rgba(var(--bg-rgb),.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:12px clamp(18px,4vw,48px);border-bottom:1px solid var(--border)}
+.brand{display:flex;align-items:center}
+.brand img{height:clamp(20px,2.3vw,30px);width:auto;filter:drop-shadow(0 0 18px rgba(var(--accent-rgb),.25))}
+.nav-links{display:flex;gap:30px;align-items:center}
+.nav-links a{font:500 13px/1 'Space Grotesk';color:rgba(244,241,235,.82);transition:color .3s}
+.nav-links a:hover{color:#fff}
+header.nav.solid .nav-links a{color:var(--text-2)}
+header.nav.solid .nav-links a:hover{color:var(--text)}
+.btn{font:600 14px/1 'Space Grotesk';padding:13px 22px;border-radius:999px;background:var(--accent);color:#fff;display:inline-flex;gap:9px;align-items:center;cursor:pointer;transition:transform .25s var(--ease),background .25s,box-shadow .25s;will-change:transform;border:1px solid transparent}
+.btn:hover{background:var(--accent-2);box-shadow:0 12px 40px rgba(var(--accent-rgb),.35)}
+.btn:active{transform:translateY(1px) scale(.99)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.btn.ghost{background:transparent;color:#F4F1EB;border-color:rgba(244,241,235,.4)}
+.btn.ghost:hover{background:rgba(255,255,255,.08)}
+.btn.sm{padding:10px 16px;font-size:13px}
+header.nav .nav-links a.btn{color:#fff}
+@media(max-width:760px){.nav-links a:not(.btn){display:none}}
+
+/* hero */
+.hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;z-index:2;color:var(--onimg)}
+.hero video,.hero .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:.62}
+.hero .shade{position:absolute;inset:0;z-index:1;background:radial-gradient(120% 90% at 50% 6%,transparent 42%,rgba(0,0,0,.5)),linear-gradient(180deg,rgba(0,0,0,.5) 0%,transparent 30%,transparent 46%,rgba(4,3,4,.88) 100%)}
+.hero-body{position:relative;z-index:2;width:min(92vw,var(--max));margin-inline:auto;padding-bottom:clamp(46px,7vw,96px)}
+.hero h1{font-size:clamp(58px,15vw,226px);line-height:.82;font-weight:700;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:26px;color:var(--onimg)}
+.hero h1 .ln{display:block;overflow:hidden}
+.hero h1 .ln b{display:block;font-weight:700;transform:translateY(115%);animation:appear 1.05s var(--ease) forwards}
+.hero h1 .ln:nth-child(2) b{animation-delay:.1s}
+.hero h1 .fx{color:var(--accent)}
+.hero .sub{max-width:660px;font-size:clamp(17px,2vw,22px);color:rgba(244,241,235,.92);margin-bottom:30px;opacity:0;animation:rise .9s .55s var(--ease) forwards}
+.hero .sub b{color:#fff;font-weight:500}
+.hero .actions{display:flex;gap:14px;flex-wrap:wrap;opacity:0;animation:rise .9s .75s var(--ease) forwards}
+.scrollcue{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:2;font:500 10px/1 'JetBrains Mono';letter-spacing:.25em;text-transform:uppercase;color:rgba(244,241,235,.6);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:rise 1s 1.2s var(--ease) forwards}
+.scrollcue .bar{width:1px;height:36px;background:linear-gradient(var(--accent),transparent);animation:drop 1.8s var(--ease) infinite}
+@keyframes drop{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+@keyframes appear{to{transform:translateY(0)}}
+@keyframes rise{to{opacity:1;transform:translateY(0)}}
+
+/* appear */
+.appear{opacity:0;transform:translateY(30px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.appear.in{opacity:1;transform:none}
+.appear[data-d="1"]{transition-delay:.08s}.appear[data-d="2"]{transition-delay:.16s}.appear[data-d="3"]{transition-delay:.24s}
+
+section{position:relative;padding:clamp(72px,10vw,138px) 0;z-index:2}
+
+/* marquee */
+.ticker{padding:clamp(40px,6vw,78px) 0;overflow:hidden;position:relative;z-index:2}
+.tk{display:flex;width:max-content;white-space:nowrap;will-change:transform;font-size:clamp(40px,8vw,120px);font-weight:700;letter-spacing:-.015em;text-transform:uppercase;line-height:1.1;animation:tkroll 40s linear infinite}
+.ticker:hover .tk{animation-play-state:paused}
+.tk span{padding:0 .3em;color:transparent;-webkit-text-stroke:1.1px rgba(var(--text-rgb),.38)}
+.tk span.fill{color:var(--text);-webkit-text-stroke:0}
+.tk span.ac{color:var(--accent);-webkit-text-stroke:0}
+@keyframes tkroll{to{transform:translateX(-50%)}}
+
+/* generic text section */
+.blk .kicker{margin-bottom:20px}
+.blk h2{max-width:20ch}
+.prose{max-width:62ch;margin-top:22px;color:var(--text-2);font-size:clamp(16px,1.2vw,19px)}
+.prose p+p{margin-top:16px}
+.prose .q{color:var(--text)}
+
+/* ABOUT layout */
+.intro .container{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(30px,5vw,70px);align-items:center}
+.intro .prose{margin-top:18px}
+@media(max-width:860px){.intro .container{grid-template-columns:1fr}}
+
+/* poster orbit */
+.showcase{position:relative;overflow:hidden;padding:clamp(20px,3vw,44px) 0 clamp(30px,4vw,60px);z-index:2}
+.orbit{--w:clamp(150px,15vw,230px);--r:clamp(300px,32vw,480px);position:relative;z-index:2;height:clamp(270px,27vw,400px);perspective:1650px;perspective-origin:50% 50%;
+  -webkit-mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.orbit .track{position:absolute;left:50%;top:50%;width:1px;height:1px;transform-style:preserve-3d;cursor:var(--drag);transform:translateZ(var(--r)) rotateY(var(--spin,0deg))}
+.orbit .slide{position:absolute;left:0;top:0;width:var(--w);height:calc(var(--w)*1.5);margin-left:calc(var(--w)*-.5);margin-top:calc(var(--w)*-.75);
+  border-radius:14px;overflow:hidden;border:1px solid var(--border);background:#0d0d0d;
+  transform:rotateY(calc(var(--i)*30deg)) translateZ(var(--r)) rotateY(180deg);backface-visibility:hidden}
+.orbit .slide img{width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none}
+@media(max-width:760px){.orbit{--w:clamp(110px,28vw,160px);--r:clamp(220px,52vw,320px);height:clamp(220px,58vw,300px)}}
+
+/* numbers */
+.stats .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,40px);margin-top:clamp(30px,4vw,54px)}
+.num{border-top:1px solid var(--border);padding-top:22px}
+.num .fig{font-size:clamp(56px,8vw,120px);font-weight:700;line-height:.9;letter-spacing:-.03em}
+.num .fig .z{color:var(--accent);font-family:'Instrument Serif',serif;font-style:italic;font-weight:400}
+.num p{margin-top:14px;color:var(--text-2);font-size:clamp(15px,1.15vw,18px);max-width:32ch}
+@media(max-width:760px){.stats .grid{grid-template-columns:1fr}}
+
+/* CATALOG posters */
+.titles{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,22px);margin-top:clamp(30px,4vw,50px)}
+.title-card{position:relative;border:1px solid var(--border);border-radius:18px;overflow:hidden;background:#0d0d0d;aspect-ratio:2/3;transition:border-color .35s,transform .35s}
+.title-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease),filter .5s}
+.title-card .grad{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(0,0,0,.92) 100%);transition:background .5s}
+.title-card .meta{position:absolute;left:0;right:0;bottom:0;padding:clamp(18px,2.2vw,26px);z-index:2}
+.title-card .tag{font:500 11px/1 'JetBrains Mono';letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:9px;display:block}
+.title-card h3{font-size:clamp(21px,2.1vw,28px);font-weight:700;letter-spacing:-.01em;color:#fff;line-height:1.1}
+.title-card p{font-size:14.5px;line-height:1.5;color:rgba(255,255,255,.84);max-height:0;overflow:hidden;opacity:0;transition:max-height .6s var(--ease),opacity .4s,margin .4s}
+.title-card:hover{border-color:var(--border-hover);transform:translateY(-3px)}
+.title-card:hover img{transform:scale(1.05);filter:blur(2px) brightness(.55)}
+.title-card:hover .grad{background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,rgba(0,0,0,.92) 100%)}
+.title-card:hover p{max-height:340px;opacity:1;margin-top:10px}
+@media(hover:none){.title-card p{max-height:none;opacity:1;margin-top:10px}.title-card .grad{background:linear-gradient(180deg,rgba(0,0,0,0) 20%,rgba(0,0,0,.92) 100%)}}
+@media(max-width:900px){.titles{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.title-card p{max-height:none;opacity:1;margin-top:10px}.title-card .grad{background:linear-gradient(180deg,rgba(0,0,0,0) 20%,rgba(0,0,0,.92) 100%)}}
+@media(max-width:560px){.titles{grid-template-columns:1fr}}
+
+/* CO-PRO list */
+.slate{margin-top:clamp(30px,4vw,52px);border-top:1px solid var(--border)}
+.slate-item{display:grid;grid-template-columns:clamp(120px,14vw,190px) 1fr auto;gap:clamp(18px,3vw,44px);padding:clamp(22px,2.8vw,34px) 0;border-bottom:1px solid var(--border);align-items:center;transition:background .4s}
+.slate-item:hover{background:rgba(var(--accent-rgb),.04)}
+.slate-item img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:12px;border:1px solid var(--border)}
+.slate-item .tag{font:500 11px/1 'JetBrains Mono';letter-spacing:.14em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:10px}
+.slate-item h3{font-size:clamp(22px,2.6vw,36px);font-weight:700;letter-spacing:-.01em;margin-bottom:10px;line-height:1.05}
+.slate-item p{color:var(--text-2);max-width:66ch;font-size:clamp(15px,1.15vw,18px)}
+.slate-item .side{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:16px}
+.slate-item .rt{font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(40px,4.4vw,64px);color:var(--accent);line-height:.9}
+.slate-item .rt small{display:block;font:500 10px/1.4 'JetBrains Mono';letter-spacing:.16em;text-transform:uppercase;color:var(--text-3);font-style:normal;margin-top:6px}
+@media(max-width:800px){.slate-item{grid-template-columns:110px 1fr}.slate-item .side{grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:center;text-align:left}}
+
+/* TRACK RECORD shelf */
+.shelf{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:clamp(28px,4vw,46px)}
+.shelf figure{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--border);aspect-ratio:2/3;background:#0d0d0d}
+.shelf img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.shelf figure:hover img{transform:scale(1.05)}
+.shelf figcaption{position:absolute;left:0;right:0;bottom:0;padding:12px 12px 11px;font:500 11px/1.35 'JetBrains Mono';letter-spacing:.06em;color:#fff;background:linear-gradient(180deg,transparent,rgba(0,0,0,.85))}
+.shelf figcaption b{display:block;color:var(--accent);font-weight:500;letter-spacing:.14em;text-transform:uppercase;font-size:10px;margin-bottom:4px}
+@media(max-width:900px){.shelf{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px){.shelf{grid-template-columns:repeat(2,1fr)}}
+
+/* TEAM */
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.4vw,28px);margin-top:clamp(30px,4vw,52px)}
+.member{border:1px solid var(--border);border-radius:18px;overflow:hidden;background:rgba(var(--bg-rgb),.55);transition:border-color .35s,transform .35s}
+.member:hover{border-color:var(--border-hover);transform:translateY(-3px)}
+.member .ph{aspect-ratio:4/5;overflow:hidden}
+.member .ph img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.05);transition:filter .6s,transform .8s var(--ease)}
+.member:hover .ph img{filter:none;transform:scale(1.03)}
+.member .tx{padding:clamp(18px,2vw,24px)}
+.member .role{font:500 11px/1 'JetBrains Mono';letter-spacing:.14em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:9px}
+.member h3{font-size:clamp(20px,1.9vw,26px);font-weight:700;letter-spacing:-.01em;margin-bottom:10px}
+.member p{color:var(--text-2);font-size:14.5px;line-height:1.55}
+@media(max-width:900px){.team-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.team-grid{grid-template-columns:1fr}}
+
+/* CTA */
+.outro{text-align:center;padding:clamp(90px,13vw,180px) 0;position:relative;overflow:hidden;z-index:2;color:var(--text)}
+.outro img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.35;z-index:0;-webkit-mask:radial-gradient(80% 80% at 50% 50%,#000 30%,transparent 100%);mask:radial-gradient(80% 80% at 50% 50%,#000 30%,transparent 100%)}
+.outro .shade{position:absolute;inset:0;z-index:1;background:radial-gradient(72% 72% at 50% 50%,rgba(0,0,0,.25),rgba(var(--bg-rgb),.9))}
+.outro>.in{position:relative;z-index:2;width:min(92vw,860px);margin-inline:auto}
+.outro h2{font-size:clamp(36px,6vw,96px);line-height:1;font-weight:700;letter-spacing:-.02em;margin:0 auto 22px;max-width:16ch;color:var(--text)}
+.outro .lead{color:var(--text-2);max-width:56ch;margin:0 auto 6px;font-size:clamp(16px,1.4vw,20px)}
+.outro .mail{font-family:'JetBrains Mono';font-size:clamp(16px,2vw,22px);color:var(--text);border-bottom:1px solid var(--border);padding-bottom:4px;transition:color .3s,border-color .3s;display:inline-block;margin-top:26px}
+.outro .mail:hover{color:var(--accent);border-color:var(--accent)}
+.social{display:flex;gap:12px;justify-content:center;margin-top:28px}
+
+/* marks marks */
+.marks{position:absolute;inset:clamp(20px,4vw,58px);pointer-events:none;z-index:3;opacity:.5}
+.marks i{position:absolute;width:22px;height:22px;border:1.5px solid rgba(var(--accent-rgb),.6)}
+.marks i:nth-child(1){top:0;left:0;border-right:0;border-bottom:0}
+.marks i:nth-child(2){top:0;right:0;border-left:0;border-bottom:0}
+.marks i:nth-child(3){bottom:0;left:0;border-right:0;border-top:0}
+.marks i:nth-child(4){bottom:0;right:0;border-left:0;border-top:0}
+@media(max-width:600px){.marks{inset:14px}.marks i{width:15px;height:15px}}
+
+footer{border-top:1px solid var(--border);padding:48px 0 40px;position:relative;z-index:2}
+.foot{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;color:var(--text-3);font-size:13px;font-family:'JetBrains Mono'}
+.foot .tag{color:var(--text-2)}
+.foot .tag b{color:var(--text);font-weight:500}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.appear{opacity:1;transform:none}.hero h1 .ln b{transform:none}canvas#ambience{display:none}}
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<div id="topbar"></div>
+<canvas id="ambience"></canvas>
+<div id="glow"></div>
+<nav id="sidenav" aria-hidden="true">
+  <a href="#about"><span class="tx">About</span><span class="ln"></span></a>
+  <a href="#catalog"><span class="tx">Catalog</span><span class="ln"></span></a>
+  <a href="#copro"><span class="tx">Co-Pro</span><span class="ln"></span></a>
+  <a href="#record"><span class="tx">Track record</span><span class="ln"></span></a>
+  <a href="#team"><span class="tx">Team</span><span class="ln"></span></a>
+  <a href="#contact"><span class="tx">Contact</span><span class="ln"></span></a>
+</nav>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="Kalyna Film"><img src="assets/img/logo-light.png" alt="Kalyna Film" width="1000" height="161"></a>
+  <div class="nav-links">
+    <a href="#about">About</a><a href="#catalog">Catalog</a><a href="#copro">Co-Pro</a><a href="#team">Team</a><a href="#contact">Contact</a>
+    <a href="#copro" class="btn mag">Become a partner</a>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <video autoplay muted loop playsinline preload="auto" poster="assets/img/hero-poster.jpg"><source src="assets/video/hero.mp4" type="video/mp4"></video>
+  <div class="shade"></div>
+  <div class="hero-body">
+    <h1><span class="ln"><b>KALYNA</b></span><span class="ln"><b>FILM<span class="fx">.</span></b></span></h1>
+    <p class="sub">In-house, full-cycle film production. We champion originality and authenticity, <b>never shying away from bold or unconventional ideas.</b></p>
+    <div class="actions">
+      <a href="#copro" class="btn mag">Become a partner</a>
+      <a href="#catalog" class="btn ghost mag">See our films</a>
+    </div>
+  </div>
+  <div class="scrollcue">Scroll<span class="bar"></span></div>
+</section>
+
+<div class="ticker">
+  <div class="tk">
+    <span class="fill">In-house film production</span><span class="ac">—</span><span>Creative development</span><span class="ac">—</span><span class="fill">Writers’ room</span><span class="ac">·</span>
+    <span class="fill">In-house film production</span><span class="ac">—</span><span>Creative development</span><span class="ac">—</span><span class="fill">Writers’ room</span><span class="ac">·</span>
+  </div>
+</div>
+
+<section class="blk intro" id="about">
+  <div class="container">
+    <div>
+      <div class="kicker">About Kalyna Film</div>
+      <h2 class="big appear">Cinematic experiences <span class="serif accent">that resonate globally.</span></h2>
+    </div>
+    <div class="prose appear" data-d="1">
+      <p>Founded in 2022 by film industry veterans, Kalyna Film is a testament to the potent combination of experience and business acumen. Our forward-thinking strategies, paired with our dedication to quality, have fostered success across diverse audiences.</p>
+      <p>Our commitment to producing quality content has been unwavering, earning us the loyalty of diverse audiences across the globe. Our strategic approach extends beyond the creation of powerful content: we understand the importance of staying ahead in an ever-evolving industry.</p>
+      <p class="q">Partner with Kalyna Film and join a trajectory of growth and success in the world of cinema.</p>
+    </div>
+  </div>
+</section>
+
+<div class="showcase" id="showcase">
+  <div class="orbit appear">
+    <div class="track" id="track">
+      <div class="slide" style="--i:0"><img src="assets/img/p_choice.jpg" alt="The Choice" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:1"><img src="assets/img/cp_plyusha.jpg" alt="Plyusha: Service Dogs at War" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:2"><img src="assets/img/p_lifetrain.jpg" alt="Life Train" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:3"><img src="assets/img/cp_killme.jpg" alt="Kill Me Gently" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:4"><img src="assets/img/p_steph.jpg" alt="Steph" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:5"><img src="assets/img/cp_damned.jpg" alt="Dam(ned)²" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:6"><img src="assets/img/p_promise.jpg" alt="A Promise to God" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:7"><img src="assets/img/cp_light.jpg" alt="There Shall Be Light" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:8"><img src="assets/img/p_loveme.jpg" alt="Love Me If You Can" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:9"><img src="assets/img/cp_vulyk.jpg" alt="Vulyk Camp" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:10"><img src="assets/img/p_nuclear.jpg" alt="Under the Nuclear Shadow" loading="lazy" draggable="false"></div>
+      <div class="slide" style="--i:11"><img src="assets/img/h_twosides.jpg" alt="Two Sides of Love" loading="lazy" draggable="false"></div>
+    </div>
+  </div>
+</div>
+
+<section class="blk stats">
+  <div class="container">
+    <div class="kicker">In numbers</div>
+    <h2 class="big appear">Experience you can <span class="serif accent">bank a film on.</span></h2>
+    <div class="grid">
+      <div class="num appear"><div class="fig">100<span class="z">+</span></div><p>hours of successful series and film content produced by our CEO, Halyna Khrapko.</p></div>
+      <div class="num appear" data-d="1"><div class="fig">20<span class="z">22</span></div><p>founded by film industry veterans, with a team working across Ukraine and the US.</p></div>
+      <div class="num appear" data-d="2"><div class="fig">5</div><p>projects open for co-production right now: documentaries, a dark comedy and a family adventure.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" id="catalog">
+  <div class="container">
+    <div class="kicker">Catalog</div>
+    <h2 class="big appear">Stories that hit home. <span class="serif accent">And stay there.</span></h2>
+    <div class="prose appear" data-d="1"><p>We’re all about telling stories that make you think and stick with you long after the credits roll. Every frame, every scene, every character is crafted with intention and passion.</p></div>
+    <div class="titles">
+      <article class="title-card appear"><img src="assets/img/p_choice.jpg" alt="The Choice poster" loading="lazy"><div class="grad"></div><div class="meta"><span class="tag">A film by Viktoriya Melnykova</span><h3>The Choice</h3><p>In the depths of her own home, an elderly woman confronts her greatest challenge when three scared-to-death Russian soldiers break in, seeking refuge from Ukrainian artillery fire. Trapped with the enemy, she devises a daring plan to outsmart and outlast them, proving that even in the face of adversity, humanity prevails.</p></div></article>
+      <article class="title-card appear" data-d="1"><img src="assets/img/p_lifetrain.jpg" alt="Life Train poster" loading="lazy"><div class="grad"></div><div class="meta"><span class="tag">Documentary</span><h3>Life Train</h3><p>The extraordinary journeys of courageous Ukrainian railway workers who risked their lives daily to evacuate people from the most dangerous war-torn regions. Featuring interviews with Boris Johnson, Andrii Shevchenko and more.</p></div></article>
+      <article class="title-card appear" data-d="2"><img src="assets/img/p_steph.jpg" alt="Steph poster" loading="lazy"><div class="grad"></div><div class="meta"><span class="tag">Award-winning script</span><h3>Steph</h3><p>After the enemy invades Ukraine, a seven-year-old aspiring artist must survive the violent occupation of her hometown, Mariupol, alongside her single mother. The script has won and been nominated for awards including LAFA, LICA, PIFA, Prisma and NYFA.</p></div></article>
+      <article class="title-card appear"><img src="assets/img/p_promise.jpg" alt="A Promise to God poster" loading="lazy"><div class="grad"></div><div class="meta"><span class="tag">Drama series</span><h3>A Promise to God</h3><p>A journalist cuts ties with her unfaithful lover while expecting his child. Years later her son needs a donor, and the only hope is the cord blood of a sibling. A story about the fight for a little boy’s life that forces everyone to rethink what matters.</p></div></article>
+      <article class="title-card appear" data-d="1"><img src="assets/img/p_loveme.jpg" alt="Love Me If You Can poster" loading="lazy"><div class="grad"></div><div class="meta"><span class="tag">Coming soon</span><h3>Love Me If You Can</h3><p>More information coming soon.</p></div></article>
+      <article class="title-card appear" data-d="2"><img src="assets/img/p_nuclear.jpg" alt="Under the Nuclear Shadow poster" loading="lazy"><div class="grad"></div><div class="meta"><span class="tag">Coming soon</span><h3>Under the Nuclear Shadow</h3><p>More information coming soon.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="blk" id="copro">
+  <div class="container">
+    <div class="kicker">Co-production</div>
+    <h2 class="big appear">Open for partners. <span class="serif accent">Join early.</span></h2>
+    <div class="slate">
+      <div class="slate-item appear"><img src="assets/img/cp_plyusha.jpg" alt="Plyusha poster" loading="lazy"><div><span class="tag">Documentary</span><h3>Plyusha: Service Dogs at War</h3><p>Serhii, a visually impaired man, and his service dog Plyusha are separated by the war in Ukraine. A unique look at the unbreakable bond between humans and service dogs, and their critical role in the hardest times.</p></div><div class="side"><div class="rt">60<small>min running time</small></div><a class="btn sm mag" href="mailto:kf@kalynafilm.com?subject=Co-production%3A%20Plyusha">Become a partner</a></div></div>
+      <div class="slate-item appear"><img src="assets/img/cp_killme.jpg" alt="Kill Me Gently poster" loading="lazy"><div><span class="tag">Dark comedy</span><h3>Kill Me Gently</h3><p>A close-knit family receives a bizarre last will from a grandmother everyone thought died in a shipwreck years ago: the youngest granddaughter must marry and, on her wedding night, kill her spouse to inherit the multi-million-dollar legacy. Then they discover grandma is still alive…</p></div><div class="side"><div class="rt">90<small>min running time</small></div><a class="btn sm mag" href="mailto:kf@kalynafilm.com?subject=Co-production%3A%20Kill%20Me%20Gently">Become a partner</a></div></div>
+      <div class="slate-item appear"><img src="assets/img/cp_damned.jpg" alt="Dam(ned)² poster" loading="lazy"><div><span class="tag">Documentary</span><h3>Dam(ned)²</h3><p>The catastrophic potential of the Dnipro Hydroelectric Station’s destruction: devastating floods, broken ecosystems and a massive humanitarian crisis across Europe.</p></div><div class="side"><div class="rt">85<small>min running time</small></div><a class="btn sm mag" href="mailto:kf@kalynafilm.com?subject=Co-production%3A%20Dam(ned)">Become a partner</a></div></div>
+      <div class="slate-item appear"><img src="assets/img/cp_light.jpg" alt="There Shall Be Light poster" loading="lazy"><div><span class="tag">Documentary</span><h3>There Shall Be Light</h3><p>Ukraine’s power workers restore light under constant enemy fire so the country doesn’t plunge into darkness. Their stories, where courage meets life-threatening danger to keep the lights on for millions.</p></div><div class="side"><div class="rt">85<small>min running time</small></div><a class="btn sm mag" href="mailto:kf@kalynafilm.com?subject=Co-production%3A%20There%20Shall%20Be%20Light">Become a partner</a></div></div>
+      <div class="slate-item appear"><img src="assets/img/cp_vulyk.jpg" alt="Vulyk Camp poster" loading="lazy"><div><span class="tag">Adventure</span><h3>Vulyk Camp</h3><p>After a dangerous evacuation from frontline cities, a group of children finds refuge in a Carpathian village. With volunteers, a young psychologist and the locals they overcome their fears at the new Vulyk camp, until the camp faces closure and they must unite to save it.</p></div><div class="side"><div class="rt">90<small>min running time</small></div><a class="btn sm mag" href="mailto:kf@kalynafilm.com?subject=Co-production%3A%20Vulyk%20Camp">Become a partner</a></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" id="record">
+  <div class="container">
+    <div class="kicker">Track record</div>
+    <h2 class="big appear">Past successes <span class="serif accent">and what’s next.</span></h2>
+    <div class="prose appear" data-d="1"><p>Successful projects by our CEO Halyna Khrapko, plus releases coming soon.</p></div>
+    <div class="shelf">
+      <figure class="appear"><img src="assets/img/h_dinerwars.jpg" alt="The Diner Wars" loading="lazy"><figcaption><b>2019</b>The Diner Wars</figcaption></figure>
+      <figure class="appear" data-d="1"><img src="assets/img/h_familyties.jpg" alt="Family Ties" loading="lazy"><figcaption><b>2018</b>Family Ties</figcaption></figure>
+      <figure class="appear" data-d="2"><img src="assets/img/h_justsex.jpg" alt="Just Sex, Nothing Personal" loading="lazy"><figcaption><b>Comedy</b>Just Sex, Nothing Personal</figcaption></figure>
+      <figure class="appear" data-d="3"><img src="assets/img/h_twosides.jpg" alt="Two Sides of Love" loading="lazy"><figcaption><b>Produced</b>Two Sides of Love</figcaption></figure>
+      <figure class="appear" data-d="1"><img src="assets/img/s_soon2.jpg" alt="Coming soon" loading="lazy"><figcaption><b>Coming soon</b>Таємне кохання. Повернення</figcaption></figure>
+      <figure class="appear" data-d="2"><img src="assets/img/s_soon1.jpg" alt="Coming soon" loading="lazy"><figcaption><b>Coming soon</b>У неділю рано зілля копала</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="blk" id="team">
+  <div class="container">
+    <div class="kicker">The team</div>
+    <h2 class="big appear">The people of <span class="serif accent">Kalyna Film.</span></h2>
+    <div class="team-grid">
+      <article class="member appear"><div class="ph"><img src="assets/img/t_halyna.jpg" alt="Halyna Khrapko" loading="lazy"></div><div class="tx"><span class="role">CEO &amp; Founder</span><h3>Halyna Khrapko</h3><p>Expert of the Ukrainian Cultural Fund and member of the Ukrainian Film Academy, the Ukrainian Television Academy and the Public Council under the State Cinema of Ukraine. More than 100 hours of successful series and films produced.</p></div></article>
+      <article class="member appear" data-d="1"><div class="ph"><img src="assets/img/t_oleksandr.jpg" alt="Oleksandr Ts" loading="lazy"></div><div class="tx"><span class="role">Executive Producer</span><h3>Oleksandr Ts</h3><p>More than a decade as an executive producer, with numerous commercially successful projects. His pursuit of excellence drives Kalyna Film’s reputation as a respected production company in Ukraine.</p></div></article>
+      <article class="member appear" data-d="2"><div class="ph"><img src="assets/img/t_nick.jpg" alt="Nicko" loading="lazy"></div><div class="tx"><span class="role">Creative Producer</span><h3>Nicko</h3><p>From Boston and Miami to Lugano and finally Kyiv. His projects have gained international success on top-tier distribution platforms, and he brings a hands-on feel for global trends.</p></div></article>
+      <article class="member appear"><div class="ph"><img src="assets/img/t_joseph.jpg" alt="Joseph DiRienzo" loading="lazy"></div><div class="tx"><span class="role">International Development</span><h3>Joseph DiRienzo</h3><p>Born in Miami, having worked in both the US and Ukraine, Joseph navigates the global film market and has been instrumental in extending Kalyna Film’s reach worldwide.</p></div></article>
+      <article class="member appear" data-d="1"><div class="ph"><img src="assets/img/t_anastasiya.jpg" alt="Anastasiya Mironova" loading="lazy"></div><div class="tx"><span class="role">PR &amp; Marketing</span><h3>Anastasiya Mironova</h3><p>In the film industry since 2009, at major markets and festivals such as MIPTV and MIPCOM in Cannes. She has prepared teams for the American Film Market, FILMART in Hong Kong and more.</p></div></article>
+      <article class="member appear" data-d="2"><div class="ph"><img src="assets/img/t_svitlana.jpg" alt="Svitlana Lykhovyd" loading="lazy"></div><div class="tx"><span class="role">Creative Development</span><h3>Svitlana Lykhovyd</h3><p>A deep understanding of human emotions and a gift for vivid, immersive worlds. Her storytelling has shaped the creative identity of Kalyna Film.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="outro" id="contact">
+  <img class="bg" src="assets/img/cta-bg.jpg" alt="" loading="lazy">
+  <div class="shade"></div>
+  <div class="marks"><i></i><i></i><i></i><i></i></div>
+  <div class="in">
+    <div class="kicker" style="justify-content:center">Contact us</div>
+    <h2 class="appear" style="margin-top:16px">Got a story <span class="serif accent">worth telling?</span></h2>
+    <p class="lead appear" data-d="1">Whether you’re a filmmaker with a brilliant idea, a producer looking to join our trajectory of growth, or simply a film enthusiast wanting to say hello, we’d love to hear from you.</p>
+    <a href="mailto:kf@kalynafilm.com" class="mail mag">kf@kalynafilm.com</a>
+    <div class="social">
+      <a class="btn ghost sm mag" href="https://instagram.com/kalyna_film" target="_blank" rel="noopener">Instagram</a>
+      <a class="btn ghost sm mag" href="https://www.facebook.com/KalynaFilm" target="_blank" rel="noopener">Facebook</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container foot">
+    <span class="tag"><b>Kalyna Film LLC.</b> In-house film production · Creative development · Writers’ room</span>
+    <span>© <span id="yr"></span></span>
+  </div>
+</footer>
+
+<script src="assets/js/lenis.min.js"></script>
+<script>
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const nav=document.getElementById('nav'),prog=document.getElementById('topbar');
+function onScroll(){const st=scrollY,h=document.documentElement.scrollHeight-innerHeight;prog.style.width=(h>0?st/h*100:0)+'%';nav.classList.toggle('solid',st>40);}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+let lenis=null;
+if(!reduce&&window.Lenis){lenis=new Lenis({lerp:.09,smoothWheel:true});requestAnimationFrame(function r(t){lenis.raf(t);requestAnimationFrame(r)});lenis.on('scroll',onScroll);}
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const id=a.getAttribute('href');if(id.length<2)return;const t=document.querySelector(id);if(!t)return;e.preventDefault();lenis?lenis.scrollTo(t,{offset:-10}):t.scrollIntoView({behavior:'smooth'})}));
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px',threshold:.1});
+document.querySelectorAll('.appear').forEach(el=>io.observe(el));
+const navMap=[...document.querySelectorAll('#sidenav a')].map(a=>({a,el:document.querySelector(a.getAttribute('href'))})).filter(o=>o.el);
+const navWatch=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)navMap.forEach(o=>o.a.classList.toggle('on',o.el===e.target))}),{rootMargin:'-45% 0px -45% 0px'});navMap.forEach(o=>navWatch.observe(o.el));
+const glow=document.getElementById('glow');
+if(matchMedia('(hover:hover)').matches){
+  let mx=innerWidth/2,my=innerHeight/2,sx=mx,sy=my,rafId=0;
+  function sp(){sx+=(mx-sx)*.14;sy+=(my-sy)*.14;if(glow)glow.style.transform='translate3d('+sx+'px,'+sy+'px,0)';if(Math.abs(mx-sx)>.3||Math.abs(my-sy)>.3){rafId=requestAnimationFrame(sp)}else{rafId=0}}
+  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;if(glow)glow.style.opacity=1;if(!rafId)rafId=requestAnimationFrame(sp)},{passive:true});
+  document.querySelectorAll('.mag').forEach(b=>{b.addEventListener('mousemove',e=>{const r=b.getBoundingClientRect();b.style.transform='translate('+(e.clientX-r.left-r.width/2)*.25+'px,'+(e.clientY-r.top-r.height/2)*.4+'px)'});b.addEventListener('mouseleave',()=>b.style.transform='')});
+}
+(function(){const orbit=document.querySelector('.orbit'),track=document.getElementById('track');if(!orbit||!track)return;
+  let angle=0,vel=0,drag=false,lastX=0,lastT=0;const SPEED=reduce?0:.09;
+  let inView=true;try{new IntersectionObserver(es=>{inView=es[0].isIntersecting},{rootMargin:'140px'}).observe(orbit)}catch(e){}
+  (function f(){requestAnimationFrame(f);if(!inView)return;if(!drag){angle+=SPEED+vel;vel*=.95;if(Math.abs(vel)<.001)vel=0}track.style.setProperty('--spin',angle+'deg')})();
+  const gx=e=>e.touches?e.touches[0].clientX:e.clientX;
+  track.addEventListener('pointerdown',e=>{drag=true;lastX=gx(e);vel=0;lastT=performance.now()});
+  addEventListener('pointermove',e=>{if(!drag)return;const x=gx(e),n=performance.now(),dx=x-lastX,dt=Math.max(n-lastT,1),da=dx*.22;angle+=da;vel=da/dt*16;lastX=x;lastT=n},{passive:true});
+  addEventListener('pointerup',()=>drag=false);addEventListener('pointercancel',()=>drag=false);
+  track.addEventListener('dragstart',e=>e.preventDefault());
+  orbit.addEventListener('wheel',e=>{if(Math.abs(e.deltaX)>Math.abs(e.deltaY)){e.preventDefault();const da=e.deltaX*.16;angle+=da;vel=da*.3}},{passive:false});
+})();
+(function(){const c=document.getElementById('ambience');if(!c||reduce){if(c)c.style.display='none';return}const ctx=c.getContext('2d');let W,H,run=true,t=0,last=0;
+  const blobs=[{x:.25,y:.3,r:.5,col:[226,72,59],s:.00018},{x:.75,y:.6,r:.6,col:[140,40,60],s:.00013},{x:.55,y:.85,r:.45,col:[90,40,30],s:.00021},{x:.85,y:.2,r:.4,col:[255,120,80],s:.00016}];
+  function size(){W=c.width=Math.max(2,innerWidth|0);H=c.height=Math.max(2,innerHeight|0)}size();addEventListener('resize',size);
+  document.addEventListener('visibilitychange',()=>{run=!document.hidden;last=0});
+  function draw(ts){requestAnimationFrame(draw);if(!run)return;if(ts-last<33)return;last=ts;t++;ctx.clearRect(0,0,W,H);ctx.globalCompositeOperation='screen';
+    blobs.forEach((b,i)=>{const x=(b.x+Math.sin(t*b.s*7+i)*.06)*W,y=(b.y+Math.cos(t*b.s*5+i)*.06)*H,rad=b.r*Math.min(W,H);const g=ctx.createRadialGradient(x,y,0,x,y,rad);g.addColorStop(0,'rgba('+b.col[0]+','+b.col[1]+','+b.col[2]+',.14)');g.addColorStop(1,'rgba('+b.col[0]+','+b.col[1]+','+b.col[2]+',0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H)});
+  }
+  requestAnimationFrame(draw);
+})();
+document.getElementById('yr').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
